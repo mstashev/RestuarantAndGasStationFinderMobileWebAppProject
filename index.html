@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html lang = "en-us" manifest="offline/infocat.manifest">
+    <head>
+    	<meta name="viewport" content="width=device-width, inital-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    	<script type="text/javascript" src="js/geo.js"></script>
+        <script type="text/javascript" src="../jquery/jquery.js"></script>
+        <link href="../jquery/jqtouch/jqtouch/jqtouch.css" rel="stylesheet" media="screen" type="text/css">
+        <script type="text/javascript" src="../jquery/jqtouch/jqtouch/jqtouch.js"></script>
+        <link href="../jquery/jqtouch/themes/jqt/theme.css" rel="stylesheet" media="screen" type="text/css">
+        <link rel="Shortcut Icon" href="../jquery/jqtouch/themes/jqt/img/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="../jquery/jqtouch/themes/apple/img/infocat.png"/>
+        <script type="text/javascript"> 
+          		var jQT = $.jQTouch({
+                icon: 'infocat.png',
+                statusBar: 'black'
+            });
+        </script>
+        <style type="text/css">
+		#mymap {
+			width:100px;
+			height:100px;	
+		}
+		</style>
+        <!--<script type="text/javascript">
+		map.Width=document.getElementById("mymap").width;
+		map.Height=document.getElementById("mymap").height;
+		
+		if (navigator.geolocation) {
+			//if the feature exists, try to get the current location. If it's available, then 
+			navigator.geolocation.getCurrentLocation(showLocation,maperror,{timeout:5000});
+		}
+		
+		function showLocation (position) {
+			var mymap=document.getElementById("mymap");//find the location to place the map	
+			mymap.innerHTML = "<img src='http://maps.google.com/maps/api/staticmap?center=" + position.coords.latitude + "," + position.coords.longitude + "&zoom=12&size=" + mapWidth + "x" + mapHeight + "&sensor=true' />";
+		}
+		
+		function maperror (whicherror) {
+			
+		}
+		
+		
+		</script>-->
+        <script> 
+		function getCoords() {
+		var mycoords={};
+		var whatever;
+		if(geo_position_js.init()){
+			whatever = geo_position_js.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true,options:5000});
+		}
+		else{
+			alert("Functionality not available");
+		}
+		return whatever;
+		}
+ 
+		function success_callback(p)
+		{
+			
+			mycoords.lat=p.coords.latitude;
+			mycoords.lng=p.coords.longitude;
+			alert('lat='+p.coords.latitude+';lon='+p.coords.longitude);
+			return mycoords;
+		}
+		
+		function error_callback(p)
+		{
+			alert('error='+p.message);
+		}		
+		
+		
+		function time() {
+		var t = setTimeout("getCoords()", 3000);
+		}
+	</script>
+        <title>InfoCat</title>
+    </head>
+    <body onLoad="time()">
+		<div id="home">
+    		<div class="toolbar">
+    			<h1>InfoCat</h1>
+    		</div>
+        		<ul class="rounded">
+    				<li class="arrow"><a class="cube" href="#food">Restuarant Finder</a></li>
+    				<li class="arrow"><a class="dissolve" href="#gas">Gas Station Finder</a></li>
+    				<li class="arrow"><a class="slide" href="#campus">Campus Events</a></li>
+  				</ul>
+            <div id="mymap"></div>
+        	<div class="info">
+    			<p>&copy; IUPUI</p>
+  			</div>
+        </div>
+		<div id="food">
+        	<div class="toolbar">
+    			<h1>Restaurant Finder</h1>
+    			<a class="button back" href="#">Back</a> 
+            </div>
+          	<div>
+          		<form action="" method="" name="restaurantFinder" title="restaurantFinder">
+          			<!-- this autofocuses, needs to be turned off somehow. -->
+                    <ul class="rounded">
+                    	<li>
+                            <select title="foodType">
+                            	<option>Select Type</option>
+                            	<option>Pizza</option>
+                                <option>Mexican</option>
+                                <option>Chinese</option>
+                                <option>American</option>
+                            </select>
+                        </li>					
+                    </ul>
+                    <ul class="rounded">
+                    	<li>
+                        	<select title="foodPriceRange">
+                            	<option>Select Price</option>
+                                <option>$5 or less</option>
+                                <option>$5 to $10</option>
+                                <option>$10 to $15</option>
+                                <option>$15 or more</option>
+                            </select>
+                        </li>
+					</ul>
+					<ul class="rounded">
+                    	<li>
+                        	<select title="foodSelectDistance">
+                            	<option>Select Distance</option>
+                                <option>Walking Distance</option>
+                                <option>5 or less miles</option>
+                                <option>5 to 10 miles</option>
+                                <option>10 or more miles</option>
+                            </select>
+                        </li>
+                    </ul>
+                    <ul class="rounded">
+						<li>
+                        	<select title="foodSelectDelivery">
+                            	<option>Select Delivery Option</option>
+                                <option>Yes</option>
+                                <option>No</option>
+                                <option>Doesn't Matter</option>
+                            </select>
+                        </li>
+					</ul>
+ 				</form><br /><br />
+          		<input type="submit" value="Go" />
+  			</div>
+        </div>
+		<div id="gas">
+        	<div class="toolbar">
+    			<h1>Gas Station Finder</h1>
+    			<a class="button back" href="#">Back</a> 
+            </div>
+            <div>
+          		<form action="" method="" title="gasStationFinder" name="gasStationFinder">
+          			<ul class="rounded">
+                    	<li>
+                            <select title="gasType">
+                            	<option>Select Type</option>
+                            	<option>Unleaded</option>
+                                <option>Plus</option>
+                                <option>Premium</option>
+                                <option>Desiel</option>
+                            </select>
+                        </li>					
+                    	<li>
+                        	<select title="gasSelectDistance">
+                            	<option>Select Distance</option>
+                                <option>Walking distance</option>
+                                <option>5 miles or less</option>
+                                <option>5 to 10 miles</option>
+                                <option>10 or more miles</option>
+                            </select>
+                        </li>
+                    </ul>
+ 				</form><br /><br />
+          		<input type="submit" value="Go" />
+        	</div>
+        </div>
+		<div id="campus">
+        	<div class="toolbar">
+    			<h1>Campus Events</h1>
+    			<a class="button back" href="#">Back</a> 
+            </div>
+            <div>
+          		<ul class="rounded">
+    				<li>show events from rss feed based off of geocoordinates</li>
+  				</ul>
+        	</div>
+        </div>
+	</body>
+</html>

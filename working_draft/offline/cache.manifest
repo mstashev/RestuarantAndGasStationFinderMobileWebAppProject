@@ -1,0 +1,20 @@
+CACHE MANIFEST
+
+CACHE:
+../index.html
+../index3.html
+../../../jquery/jquery.js
+../../../jquery/jquery.json-2.2.js
+../../../jquery/jqtouch/jqtouch/jqtouch.js
+../../../jquery/jqtouch/jqtouch/jqtouch.css
+../../../jquery/jqtouch/themes/jqt/theme.css
+../js/geo.js
+../js/jstorage.js
+../js/buildings.js
+../js/eventobj.js
+../js/gears_init.js
+../js/geo_test.js
+../../../jquery/jqtouch/themes/jqt/img/favicon.ico
+
+FALLBACK:
+../index.html   ../ index3.html 

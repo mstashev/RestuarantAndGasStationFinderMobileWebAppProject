@@ -1,0 +1,268 @@
+<!--
+////////////////////////////////
+// CREATED BY: NAME HERE
+// Project NAME: NAME HERE
+// PURPOSE: PURPOSE HERE
+// DEPENDENCIES: PLACE HERE
+// ///////////////////////////////
+//   
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//			Revision history
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	NAME    		////  DATE   		  ////    CHANGES
+//  NAME GOES HERE  ////  DATE OF CHANGES ////  DESC: OF CHANGES MADE methods added and description 		//
+-->
+
+<!DOCTYPE HTML>
+<html lang = "en-us" manifest="offline/cache.manifest">
+	<head>
+	<meta name="viewport" content="width=device-width, inital-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="../../jquery/jquery.js"></script>
+	<link href="../../jquery/jqtouch/jqtouch/jqtouch.css" rel="stylesheet" media="screen" type="text/css">
+	<script type="text/javascript" src="../../jquery/jqtouch/jqtouch/jqtouch.js"></script>
+	<link href="../../jquery/jqtouch/themes/jqt/theme.css" rel="stylesheet" media="screen" type="text/css">
+	<link rel="Shortcut Icon" href="../../jquery/jqtouch/themes/jqt/img/favicon.ico" type="image/x-icon" />
+	<link rel="apple-touch-icon" href="../../jquery/jqtouch/themes/apple/img/infocat.png"/>
+	<!-- local storage scripts -->
+	<script type="text/javascript" src="../../jquery/jquery.json-2.2.js"></script>
+	<script type="text/javascript" src="js/jstorage.js"></script>
+	<script type="text/javascript" src="js/buildings.js"></script>
+	<script type="text/javascript" src="js/eventobj.js"></script>
+	<script type="text/javascript" src="http://www.google.com/jsapi/?key=ABQIAAAAneJ9x9646j8eLQ5EbIKhlxTp3jYUUitdaIIAU8NuR4Lm6PbidxRMYSPRQMVRVAa_btVX0IgrCFh9rQ"></script>
+	<script type="text/javascript"> 
+          		var jQT = $.jQTouch({
+                icon: 'infocat.png',
+                statusBar: 'black'
+            });
+        </script>
+	<script type="text/javascript">
+		//$(document	 ;
+		</script>
+	<script type="text/javascript">
+	function printBuildings()
+	{
+		var myarr=[];
+		myarr=getBuildings();
+		var str = "";
+		var i = 0;
+		for(i=0;i<myarr.length;i++)
+		{
+			var b = myarr[i];
+			str+="BUILDING "+(i+1)+"<br /> NAME: "+b.NAME+" <br />";
+			str+="Northwest Corner (lat,lng): ( "+b.NW_Corner.LAT+","+b.NW_Corner.LNG+" ) <br />";
+			str+="Northeast Corner (lat,lng): ( "+b.NE_Corner.LAT+","+b.NE_Corner.LNG+" ) <br />";
+			str+="Southwest Corner (lat,lng): ( "+b.SW_Corner.LAT+","+b.SW_Corner.LNG+" ) <br />";
+			str+="Southeast Corner (lat,lng): ( "+b.SE_Corner.LAT+","+b.SE_Corner.LNG+" ) <br /> <br />";
+			
+		}
+		document.getElementById("console").innerHTML+=str;
+		
+	}
+	
+	function printEvents()
+	{
+		var myarr=[];
+		myarr=getEvents();
+		var str = "";
+		var i = 0;
+		for(i=0;i<myarr.length;i++)
+		{
+			var e = myarr[i];
+			str+="Event "+(i+1)+"<br /> Title: "+e.Title+" <br />";
+			str+="location: "+e.Place+"  <br />";
+			str+="Building Code: "+e.bCode+"  <br />";
+			str+="Date: "+e.dateTime+"  <br />";
+			str+="Hosted by: "+e.Host+"  <br />";
+			str+="Event Type: "+e.Entry+"  <br /> <br />";
+			
+		}
+		document.getElementById("console").innerHTML+=str;
+		
+	}
+	
+	function storeApp()
+	{
+		var myapp=$.jStorage.get('APP',new Object());
+		if(myapp.positionHistory == null)
+		{
+			var userPositions=[];
+		}
+		else
+		{
+			var userPositions=myapp.positionHistory;
+		}
+		userPositions.push(getUserPos());
+		myapp.Buildings=getBuildings();
+		myapp.Events = getEvents();
+		myapp.positionHistory=userPositions;
+		$.jStorage.set('APP', myapp);
+		
+	}
+	
+	function showStoredAppInfo()
+	{
+		var myapp;
+		var mystr ="";
+		myapp=$.jStorage.get('APP');
+		mystr+="<h3>EVENTS:</h3><ul>";
+		var i = 0;
+		for(i=0;i<myapp.Events.length;i++)
+		{
+			var e = myapp.Events[i];
+			mystr+="<li>Event "+(i+1)+"<br /> Title: "+e.Title+" <br />";
+			mystr+="location: "+e.Place+"  <br />";
+			mystr+="Building Code: "+e.bCode+"  <br />";
+			mystr+="Date: "+e.dateTime+"  <br />";
+			mystr+="Hosted by: "+e.Host+"  <br />";
+			mystr+="Event Type: "+e.Entry+" </li>";
+			
+		}
+		mystr+="</ul> <h3>PLACES</h3> <ul>";
+		
+		for(i=0;i<myapp.Buildings.length;i++)
+		{
+			var b = myapp.Buildings[i];
+			mystr+="<li>BUILDING "+(i+1)+"<br /> NAME: "+b.NAME+" <br />";
+			mystr+="Northwest Corner (lat,lng): ( "+b.NW_Corner.LAT+","+b.NW_Corner.LNG+" ) <br />";
+			mystr+="Northeast Corner (lat,lng): ( "+b.NE_Corner.LAT+","+b.NE_Corner.LNG+" ) <br />";
+			mystr+="Southwest Corner (lat,lng): ( "+b.SW_Corner.LAT+","+b.SW_Corner.LNG+" ) <br />";
+			mystr+="Southeast Corner (lat,lng): ( "+b.SE_Corner.LAT+","+b.SE_Corner.LNG+" ) <br /> </li>";
+			
+		}
+		
+		mystr+="</ul> <h3>Position History</h3><p> Most recent to first use</p> <ul>";
+		
+		for(i=0;i<myapp.positionHistory.length;i++)
+		{
+			var b = myapp.positionHistory[i];
+			mystr+="<li> User (lat, lng)--(BLDING CODE): ( "+b.LAT+" , "+b.LNG+" )--( "+getBuildingCode(b.LAT,b.LNG)+" ) </li>";
+		}
+		mystr+="</ul>";
+		
+		document.getElementById("console").innerHTML =mystr;
+	}
+	
+	</script>
+	<title>InfoCat</title>
+	</head>
+	<body onLoad="storeApp()">
+<div id="home">
+      <ul class="rounded">
+    <li class="arrow"><a class="cube" href="#food">Restaurant Finder</a></li>
+    <li class="arrow"><a class="dissolve" href="#gas">Gas Station Finder</a></li>
+    <li class="arrow"><a class="slide" href="#campus" onclick="showStoredAppInfo();">Campus Events</a></li>
+    <li class="arrow"><a href="#about" class="slideup">About</a></li>
+    <li class="arrow"><a href="mailto:mstashev@gmail.com" rel="external" class="slideup">Contact</a></li>
+  </ul>
+      <div class="info">
+    <p>&copy; IUPUI</p>
+  </div>
+      <!-- geolocation scripts--- Goes on bottom of body--> 
+      <script type="text/javascript" src="js/gears_init.js"></script> 
+      <script type="text/javascript" src="js/geo.js"></script> 
+      <script type="text/javascript" src="js/geo_test.js"></script> 
+    </div>
+<div id="food">
+      <div class="toolbar">
+    <h1>Restaurant Finder</h1>
+    <a class="button back" href="#">Back</a> </div>
+    <div><iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?near=500-598+W+Allegheny+St,+Indianapolis,+IN+46202&amp;geocode=CY_UnCCaVJTxFdHlXgIdMy_d-inPN44ttlBriDHwdD-B4j3jjw&amp;q=restaurants&amp;f=l&amp;sll=39.770383,-86.169076&amp;sspn=0.021407,0.043645&amp;ie=UTF8&amp;hq=restaurants&amp;hnear=&amp;ll=39.770383,-86.169076&amp;spn=0.011356,0.018005&amp;output=embed"></iframe></div>
+      
+      <!-- <form action="" method="" name="restaurantFinder" title="restaurantFinder">
+                    <ul class="rounded">
+                    	<li>
+                            <select title="foodType">
+                            	<option>Select Type</option>
+                            	<option>Pizza</option>
+                               <option>Mexican</option>
+                                <option>Chinese</option>
+                                <option>American</option>
+                            </select>
+                        </li>					
+                    </ul>
+             		<ul class="rounded">
+                    	<li>
+                        	<select title="foodPriceRange">
+                            	<option>Select Price</option>
+                                <option>$5 or less</option>
+                                <option>$5 to $10</option>
+                                <option>$10 to $15</option>
+                                <option>$15 or more</option>
+                            </select>
+                        </li>
+					</ul>
+					<ul class="rounded">
+                    	<li>
+                        	<select title="foodSelectDistance">
+                            	<option>Select Distance</option>
+                                <option>5 or less miles</option>
+                           		<option>5 to 10 miles</option>
+                                <option>10 or more miles</option>
+                            </select>
+                        </li>
+                    </ul>
+                    <ul class="rounded">
+						<li>
+                        	<select title="foodSelectDelivery">
+                            	<option>Select Delivery Option</option>
+                                <option>Yes</option>
+                                <option>No</option>
+                                <option>Doesn't Matter</option>
+                            </select>
+                        </li>
+					</ul>
+ 				</form><br /><br />
+          		<input type="submit" value="Go" onClick="printToMap()" />
+  			</div> --> 
+    </div>
+<div id="gas">
+      <div class="toolbar">
+    <h1>Gas Station Finder</h1>
+    <a class="button back" href="#">Back</a> </div>
+    <div>
+      <p style="text-align:center"><iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=CY_UnCCaVJTxFdHlXgIdMy_d-inPN44ttlBriDHwdD-B4j3jjw&amp;q=Gas+Station+near+Indianapolis,+500-598+West+Allegheny+Street,+IN+46202&amp;aq=0&amp;sll=39.776682,-86.169891&amp;sspn=0.042811,0.08729&amp;ie=UTF8&amp;hq=Gas+Station&amp;hnear=598+W+Allegheny+St,+Indianapolis,+Indiana+46202&amp;ll=39.771867,-86.163025&amp;spn=0.046178,0.05167&amp;z=13&amp;output=embed"></iframe></p>
+      <br /></div>
+      <!-- <div>
+          		<form action="" method="" title="gasStationFinder" name="gasStationFinder">
+          			<ul class="rounded">
+                    	<li>
+                            <select title="gasType">
+                            	<option>Select Type</option>
+                            	<option>Unleaded</option>
+                                <option>Plus</option>
+                                <option>Premium</option>
+                                <option>Desiel</option>
+                            </select>
+                        </li>					
+                    	<li>
+                        	<select title="gasSelectDistance">
+                            	<option>Select Distance</option>
+                                <option>Walking distance</option>
+                                <option>5 miles or less</option>
+                                <option>5 to 10 miles</option>
+                                <option>10 or more miles</option>
+                            </select>
+                        </li>
+                    </ul>
+ 				</form><br /><br />
+          		<input type="submit" value="Go" onClick="printToMap()" />
+        	</div>--> 
+    </div>
+<div id="campus">
+      <div class="toolbar">
+    <h1>Campus Events</h1>
+    <a class="button back" href="#">Back</a> </div>
+      <div>
+    <div id="console"></div>
+  </div>
+    </div>
+    <div id="about">
+      <div class="toolbar">
+    <h1>About</h1>
+    <a class="button back" href="#">Back</a> </div>
+    <br />
+      <h6>This app is for IUPUI students, staff, and visitors who want to find food, gas stations, and campus events from where they are currently standing</h6>
+      </div>
+</body>
+</html>

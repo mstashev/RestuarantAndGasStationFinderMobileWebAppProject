@@ -1,0 +1,39 @@
+
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.xdomainajax.js"></script>
+	<script type="text/javascript" src="js/jfeed.js"></script>
+
+	
+  <script type="text/javascript">
+
+		var myEvents=[];
+		 jQuery.getFeed({
+				url: 'http://science.iupui.edu/events.xml',
+				success: function(feed) {
+											 alert(feed);
+											for(var i=0; i< feed.items.length;i++)
+											{
+												var desc= feed.items[i].description.replace('&lt;','<').replace('&gt;','>').replace('&quot;','"');
+												myEvents.push({buildingName:desc.substring(desc.find('<div class="field field-type-text field-field-event-building"><div class="field-label">Building:&amp;nbsp;</div><div class="field-items"><div class="field-item odd">')+165,desc.find('</div>')),RoomNum:desc.substring(desc.find('<div class="field field-type-text field-field-event-room-number"><div class="field-label">Room Number:&amp;nbsp;</div><div class="field-items"><div class="field-item odd">')+171,desc.find('</div>')),dateTime:desc.substring(desc.find('<span class="date-display-single">')+50,desc.find('</span>')), theHost:"School of Science",theTitle:data.items[i].title, dsc:desc});
+												
+											}
+											for( var j=0; j<myEvents.length;j++)
+												{
+													var tmp=myEvents[j];
+													makeEvent(tmp.theTitle,'',tmp.buildingName+' , '+tmp.RoomNum,tmp.dateTime,tmp.theHost,tmp.dsc);
+												}
+										}
+						});
+						
+		</script> 		 
+
+</head>
+<body>
+	
+</body>
+</html>
